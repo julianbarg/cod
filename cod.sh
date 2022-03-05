@@ -43,20 +43,7 @@ function filter_folder {
 		echo "No filter provided."
 		exit 1
 	fi 
-
-	# If filter_timestamp and filter_coding can handle loops and 
-	# folders then we do not need to handle them here.
-	# for i; do
-	# 	if [[ -d $i ]]; then
-	# 		# Pass $ITERATION and $CODE only if they exist
-	# 		PASS_I=$([ ! -z "${ITERATION}" ] && echo "-i $ITERATION")
-	# 		PASS_C=$([ ! -z "${CODE}" ] && echo "-i $CODE")
-	# 		to_code+=$( filter_folder $i/* $PASS_I $PASS_C )
-	# 	else
-	# 		to_code+=( $i )
-	# 	fi
-	# done
-
+	
 	if [ ! -z $ITERATION ]; then
 		to_code="$( filter_timestamp $ITERATION $to_code )"
 	fi
