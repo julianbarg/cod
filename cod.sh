@@ -71,6 +71,22 @@ function cod {
 				  shift
 				  shift
 				  ;;
+				-c|-C|--code)
+				  CODE="$2"
+				  shift
+				  shift
+				  ;;
+				#TODO:
+				# -s|-S|--short_code)
+				#   SHORT="$2"
+				#   shift
+				#   shift
+				#   ;;
+				# -y|-Y|--yaml)
+				#   YAML="$2"
+				#   shift
+				#   shift
+				#   ;;
 				-*|--*)
 				  echo "Unknown option $1."
 				  return 1
@@ -81,9 +97,8 @@ function cod {
 				  ;;
 			esac
 		done
+
 		set -- "${POSITIONAL_ARGS[@]}"
-		CODE=$1
-		shift
 
 		# Utility function that handles insertion of code.
 		function insert_code_ {
