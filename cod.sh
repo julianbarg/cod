@@ -137,20 +137,6 @@ function iteration_absent {
 	esac
 }
 
-# Utility function that handles insertion of code.
-function insert_code_ {
-	CODE=$1
-	FILE=$2
-	ITERATION=$3
-	mk_coding $FILE
- 	if [ ! -z $ITERATION ]; then
- 		insert_iteration_ $ITERATION $FILE
- 	fi
-	if code_absent ${CODE} ${FILE}; then
-	 		echo "* #${CODE}" >> $FILE
-	fi
-}
-
 # Utility to handle insertion of iteration timestamp.
 function insert_iteration_ {
 	ITERATION=$1
@@ -184,23 +170,27 @@ function insert_code {
 	CODE=$1
 	shift
 
-	declare -a pids=()
+	# Utility function that handles insertion of code.
+	function insert_code_ {
+		CODE=$1
+		FILE=$2
+		ITERATION=$3
+		mk_coding $FILE
+	 	if [ ! -z $ITERATION ]; then
+	 		insert_iteration_ $ITERATION $FILE
+	 	fi
+		if code_absent ${CODE} ${FILE}; then
+		 		echo "* #${CODE}" >> $FILE
+		fi
+	}
+
 	for i ; do
 		# Some checks here are redundant, like checking for timestamp
 		# if coding section is just inserted by mk_coding, but whatever.
 		# Could eventually figure out how to use mk_coding return 
 		# statement.
-	 	# pids+=($(insert_code_ $CODE $i $ITERATION & echo $! &))
 	 	(insert_code_ $CODE $i $ITERATION & )
 	done
-
-	# This does not work when running the prior task in subshell.
-	# Need to come up with other solution for quiet parallelization.
-	# # wait for all pids
-	# for pid in ${pids[*]}; do
- #    	wait $pid
-	# done
-	# return
 }
 
 function remove_code {
