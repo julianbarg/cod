@@ -70,7 +70,7 @@ function cod {
 	function remove_code {
 		# This would not work if the code exists more than once for some
 		# reason, but I think I can handle that later.
-		echo "Removing code '${CODE}'"
+		# echo "Removing code '${CODE}'"
 		CODE=$1
 		shift
 
@@ -124,6 +124,8 @@ function cod {
 	# 	code_document $file $CODES
 	# }
 
+	# Parse arguments
+
 	POSITIONAL_ARGS=()
 	while [[ $# -gt 0 ]]; do
 		case $1 in 
@@ -168,6 +170,8 @@ function cod {
 	done
 	set -- "${POSITIONAL_ARGS[@]}"
 
+	# Some sensible logic for setting arguments.
+
 	if [[ -z $YAML ]]; then
 		YAML=$DEFAULT_YAML
 	fi
@@ -177,12 +181,12 @@ function cod {
 	fi
 
 	# For debugging:
-	echo "Iteration: $ITERATION"
-	echo "Code: $CODE"
-	echo "Short code: $SHORT_CODE"
-	echo "YAML: $YAML"
-	echo "Project: $PROJECT"
-	echo "Positional arguments: $@"
+	# echo "Iteration: $ITERATION"
+	# echo "Code: $CODE"
+	# echo "Short code: $SHORT_CODE"
+	# echo "YAML: $YAML"
+	# echo "Project: $PROJECT"
+	# echo "Positional arguments: $@"
 
 	case $1 in
 		remove_code)
