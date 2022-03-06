@@ -1,48 +1,23 @@
 #!/bin/bash
+DEFAULT_YAML="/$HOME/.config/cod/cod.yaml"
 
 function cod {
-
-	default_yaml="/$HOME/.config/cod/cod.yaml"
+	
+	# Make sure not to reuse prior CODE variable.
+	CODE=""
+	
 	source "$(dirname ${BASH_SOURCE[0]})/utility/utility.sh"
 
 	function filter_folder {
 		# Allows you to code a subset of documents based on a flag.
 		# Continue where you left off if coding iteration incomplete.
-		POSITIONAL_ARGS=()
-		while [[ $# -gt 0 ]]; do
-			case $1 in 
-				-i|-I|--iteration)
-				  ITERATION="$2"
-				  shift
-				  shift
-				  ;;
-				-c|-C|--code)
-				  #TODO: Should eventually be updated to grab code from yaml
-				  # based on project and one-letter code, while still
-				  # allowing for the use of the full keyword. That might 
-				  # require using two different flags?
-				  CODE="$2"
-				  shift
-				  shift
-				  ;;
-				#TODO: This belongs in another function.
-				# -n|--new)
-				#   ITERATION=$(date +"%m/%d/%Y_%H:%M")
-				#   shift
-				#   ;;
-				-*|--*)
-				  echo "Unknown option $1."
-				  return 1
-				  ;;
-				*)
-				  POSITIONAL_ARGS+=("$1")
-				  shift
-				  ;;
-			esac
-		done
+		CODE=$1
+		ITERATION=$2
+		shift
+		shift
 
-		set -- "${POSITIONAL_ARGS[@]}"
-		to_code="${POSITIONAL_ARGS[@]}"
+		to_code="$@"
+		echo 
 
 		if [[ -z $ITERATION && -z $CODE ]]; then
 			echo "No filter provided."
@@ -63,42 +38,10 @@ function cod {
 
 	# Insert a specific code and timestamp into the specified document(s).
 	function insert_code {
-		POSITIONAL_ARGS=()
-		while [[ $# -gt 0 ]]; do
-			case $1 in 
-				-i|-I|--iteration)
-				  ITERATION="$2"
-				  shift
-				  shift
-				  ;;
-				-c|-C|--code)
-				  CODE="$2"
-				  shift
-				  shift
-				  ;;
-				#TODO:
-				# -s|-S|--short_code)
-				#   SHORT="$2"
-				#   shift
-				#   shift
-				#   ;;
-				# -y|-Y|--yaml)
-				#   YAML="$2"
-				#   shift
-				#   shift
-				#   ;;
-				-*|--*)
-				  echo "Unknown option $1."
-				  return 1
-				  ;;
-				*)
-				  POSITIONAL_ARGS+=("$1")
-				  shift
-				  ;;
-			esac
-		done
-
-		set -- "${POSITIONAL_ARGS[@]}"
+		CODE=$1
+		ITERATION=$2
+		shift
+		shift
 
 		# Utility function that handles insertion of code.
 		function insert_code_ {
@@ -127,6 +70,7 @@ function cod {
 	function remove_code {
 		# This would not work if the code exists more than once for some
 		# reason, but I think I can handle that later.
+		echo "Removing code '${CODE}'"
 		CODE=$1
 		shift
 
@@ -134,6 +78,9 @@ function cod {
 			sed -i -E "/\* #${CODE}$/d" $i
 		done
 	}
+
+	# function code {
+	# }
 
 	# #TODO: filter by coding.
 	# function filter_coding {
@@ -177,22 +124,82 @@ function cod {
 	# 	code_document $file $CODES
 	# }
 
+	POSITIONAL_ARGS=()
+	while [[ $# -gt 0 ]]; do
+		case $1 in 
+			-i|-I|--iteration)
+			  ITERATION="$2"
+			  shift
+			  shift
+			  ;;
+			-c|-C|--code)
+			  CODE="$2"
+			  shift
+			  shift
+			  ;;
+			-s|-S|--short_code)
+			  SHORT_CODE="$2"
+			  shift
+			  shift
+			  ;;
+			-y|-Y|--yaml)
+			  YAML="$2"
+			  shift
+			  shift
+			  ;;
+			-p|-P|--project)
+			  PROJECT="$2"
+			  shift
+			  shift
+			  ;;
+			-n|--new)
+			  ITERATION=$(date +"%m/%d/%Y_%H:%M")
+			  shift
+			  ;;
+			-*|--*)
+			  echo "Unknown option $1."
+			  return 1
+			  ;;
+			*)
+			  POSITIONAL_ARGS+=("$1")
+			  shift
+			  ;;
+		esac
+	done
+	set -- "${POSITIONAL_ARGS[@]}"
+
+	if [[ -z $YAML ]]; then
+		YAML=$DEFAULT_YAML
+	fi
+	if [[ ! -z $SHORT_CODE && ! -z $PROJECT ]]; then
+		#TODO: Add some error if project/code does not exist.
+		CODE=$( cat $YAML | yq ".codes.${PROJECT}.${SHORT_CODE}" )
+	fi
+
+	# For debugging:
+	echo "Iteration: $ITERATION"
+	echo "Code: $CODE"
+	echo "Short code: $SHORT_CODE"
+	echo "YAML: $YAML"
+	echo "Project: $PROJECT"
+	echo "Positional arguments: $@"
+
 	case $1 in
 		remove_code)
 		  shift
-		  remove_code "$@"
+		  remove_code "${CODE}" "$@"
 		  ;;
 		filter_folder)
 		  shift
-		  filter_folder "$@"
+		  filter_folder "${CODE}" "${ITERATION}" "$@"
 		  ;;
 		insert_code)
 		  shift
-		  insert_code "$@"
+		  insert_code "${CODE}" "${ITERATION}" "$@"
 		  ;;
 		remove_code)
 		  shift
-		  remove_code "$@"
+		  remove_code "${CODE}" "$@"
 		  ;;
 	esac
 }
