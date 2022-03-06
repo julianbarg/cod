@@ -98,7 +98,7 @@ function filter_timestamp {
 function mk_coding {
 	FILE=$1
 	if [[ $(grep -L -E "^## Codes$" $FILE) ]]; then
-		echo -e "\n\n## Codes\n\n* @iteration\n" >> $FILE
+		echo -e "\n\n## Codes\n\n* @iteration" >> $FILE
 	fi
 	return
 }
@@ -142,10 +142,11 @@ function insert_code_ {
 	CODE=$1
 	FILE=$2
 	if code_absent ${CODE} ${FILE}; then
-	 		echo "* #$CODE" >> FILE
+	 		echo "* #${CODE}" >> $FILE
 	fi
 }
 
+# Utility to handle insertion of iteration timestamp.
 function insert_iteration_ {
 	ITERATION=$1
 	FILE=$2
@@ -174,7 +175,7 @@ function insert_code {
 			  ;;
 		esac
 	done
-	set -- "${POSITIONAL_ARGS[@]}"\
+	set -- "${POSITIONAL_ARGS[@]}"
 	CODE=$1
 	shift
 
@@ -184,8 +185,10 @@ function insert_code {
 		# Could eventually figure out how to use mk_coding return 
 		# statement.
 	 	mk_coding $i
+	 	if [ ! -z $ITERATION ]; then
+	 		insert_iteration_ $ITERATION $i
+	 	fi
 	 	insert_code_ $CODE $i
-	 	insert_iteration_ $CODE $i
 	done
 	return
 }
