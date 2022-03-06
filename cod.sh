@@ -3,9 +3,10 @@ DEFAULT_YAML="/$HOME/.config/cod/cod.yaml"
 
 function cod {
 
-	# Make sure not to reuse prior CODE & ITERATION variable.
+	# Make sure not to reuse prior CODE variable and keep ITERATION
+	# for resume flag.
 	CODE=""
-	ITERATION=""
+	PRIOR_ITERATION=$ITERATION
 
 	source "$(dirname ${BASH_SOURCE[0]})/utility/utility.sh"
 
@@ -123,6 +124,16 @@ function cod {
 	POSITIONAL_ARGS=()
 	while [[ $# -gt 0 ]]; do
 		case $1 in 
+			#TODO: There needs to be some logic to warn about the first
+			# three arguments cooccurring.
+			-r|-R|--resume)
+			  RESUME="$1"
+			  shift
+			  ;;
+			-n|--new)
+			  ITERATION=$(date +"%m/%d/%Y_%H:%M")
+			  shift
+			  ;;
 			-i|-I|--iteration)
 			  ITERATION="$2"
 			  shift
@@ -148,10 +159,6 @@ function cod {
 			  shift
 			  shift
 			  ;;
-			-n|--new)
-			  ITERATION=$(date +"%m/%d/%Y_%H:%M")
-			  shift
-			  ;;
 			-*|--*)
 			  echo "Unknown option $1."
 			  return 1
@@ -168,6 +175,10 @@ function cod {
 
 	if [[ -z $YAML ]]; then
 		YAML=$DEFAULT_YAML
+	fi
+	if [[ ! -z $RESUME ]]; then
+		#TODO: what about -n and -i?
+		ITERATION=$PRIOR_ITERATION
 	fi
 	if [[ ! -z $SHORT_CODE && ! -z $PROJECT ]]; then
 		#TODO: Add some error if project/code does not exist.
