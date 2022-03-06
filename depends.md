@@ -2,4 +2,4 @@
     - Validate YAML
 * yq
 	- Parse YAML
-	- Install via
+	- Install via snap
