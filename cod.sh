@@ -2,6 +2,7 @@
 
 function cod {
 
+	default_yaml="/$HOME/.config/cod/cod.yaml"
 	source "$(dirname ${BASH_SOURCE[0]})/utility/utility.sh"
 
 	function filter_folder {
