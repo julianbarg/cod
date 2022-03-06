@@ -7,20 +7,17 @@ function mk_coding {
 	return
 }
 
-function filter_timestamp {
+function filter_iteration {
 	ITERATION=$1
 	shift
+	echo $(grep -L -E "^\* @iteration.*${ITERATION}" $@)
+}
 
-	declare -a to_code=()
-	for i; do
-		if [[ -d $i ]]; then
-			to_code+=$( filter_timestamp $ITERATION ${i}/* )
-		elif [[ $(grep -L -E "^\* @iteration.*${ITERATION}" $i) ]]; then
-			to_code+=($i)
-		fi
-	done
-
-	echo "${to_code[*]}"
+function filter_coding {
+	CODE=$1
+	# echo "Code: $CODE"
+	shift
+	echo $(grep -l -E "^\* #${CODE}$" $@)
 }
 
 function code_absent {
@@ -65,4 +62,13 @@ function insert_iteration_ {
 	fi
 }
 
+function print_piece {
+	FILE=$1
+	NAME="$(basename ${FILE})"
+	BAR="####################################"
 
+	printf "\n${BAR}${BAR}\nStart of ${NAME}\n${BAR}${BAR}\n\n"
+	# Use $ in grep to make sure that every line is printed.
+	grep -E -i -z -s --color=auto "KXL|Keystone(\s)?XL|$" "${FILE}"
+	printf "\n\n${BAR}${BAR}\nEnd of ${NAME}\n${BAR}${BAR}\n\n"
+}

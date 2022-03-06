@@ -2,10 +2,11 @@
 DEFAULT_YAML="/$HOME/.config/cod/cod.yaml"
 
 function cod {
-	
-	# Make sure not to reuse prior CODE variable.
+
+	# Make sure not to reuse prior CODE & ITERATION variable.
 	CODE=""
-	
+	ITERATION=""
+
 	source "$(dirname ${BASH_SOURCE[0]})/utility/utility.sh"
 
 	function filter_folder {
@@ -17,7 +18,6 @@ function cod {
 		shift
 
 		to_code="$@"
-		echo 
 
 		if [[ -z $ITERATION && -z $CODE ]]; then
 			echo "No filter provided."
@@ -25,15 +25,14 @@ function cod {
 		fi 
 
 		if [ ! -z $ITERATION ]; then
-			to_code="$( filter_timestamp $ITERATION $to_code )"
+			to_code="$( filter_iteration $ITERATION $to_code)"
 		fi
 
-		#TODO: to_code is not implemented yet.
-		# if [ ! -z $CODE ]; then
-		# 	to_code=$( filter_coding $CODE $to_code )
-		# fi
+		if [ ! -z $CODE ]; then
+			to_code="$( filter_coding $CODE $to_code)"
+		fi
 
-		echo $to_code
+		echo "${to_code}"
 	}
 
 	# Insert a specific code and timestamp into the specified document(s).
@@ -80,11 +79,6 @@ function cod {
 	}
 
 	# function code {
-	# }
-
-	# #TODO: filter by coding.
-	# function filter_coding {
-	#
 	# }
 
 	# #TODO: code document--show document(s) and insert codes.
