@@ -141,6 +141,11 @@ function iteration_absent {
 function insert_code_ {
 	CODE=$1
 	FILE=$2
+	ITERATION=$3
+	mk_coding $FILE
+ 	if [ ! -z $ITERATION ]; then
+ 		insert_iteration_ $ITERATION $FILE
+ 	fi
 	if code_absent ${CODE} ${FILE}; then
 	 		echo "* #${CODE}" >> $FILE
 	fi
@@ -179,18 +184,34 @@ function insert_code {
 	CODE=$1
 	shift
 
+	declare -a pids=()
 	for i ; do
 		# Some checks here are redundant, like checking for timestamp
 		# if coding section is just inserted by mk_coding, but whatever.
 		# Could eventually figure out how to use mk_coding return 
 		# statement.
-	 	mk_coding $i
-	 	if [ ! -z $ITERATION ]; then
-	 		insert_iteration_ $ITERATION $i
-	 	fi
-	 	insert_code_ $CODE $i
+	 	# pids+=($(insert_code_ $CODE $i $ITERATION & echo $! &))
+	 	(insert_code_ $CODE $i $ITERATION & )
 	done
-	return
+
+	# This does not work when running the prior task in subshell.
+	# Need to come up with other solution for quiet parallelization.
+	# # wait for all pids
+	# for pid in ${pids[*]}; do
+ #    	wait $pid
+	# done
+	# return
+}
+
+function remove_code {
+	# This would not work if the code exists more than once for some
+	# reason, but I think I can handle that later.
+	CODE=$1
+	shift
+
+	for i ; do
+		sed -i -E "/\* #${CODE}$/d" $i
+	done
 }
 
 # #TODO: Open documents one by one, show, and insert code based on
