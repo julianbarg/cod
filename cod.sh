@@ -135,7 +135,9 @@ function cod {
 			while [[ ! $selection == "x" ]]; do
 				read -p ">" selection
 				code=$( cat $YAML | yq ".${PROJECT}.codes.${selection}" )
-				insert_code "${code}" "${ITERATION}" $i
+				if [[ ! selection == "x" ]]; do
+					insert_code "${code}" "${ITERATION}" $i
+				fi
 			done
 			selection=""
 			# Make sure the iteration is entered even if no code set?
