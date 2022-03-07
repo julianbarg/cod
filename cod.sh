@@ -100,8 +100,6 @@ function cod {
 		YAML=$1
 		PROJECT=$2
 		ITERATION=$3
-		HIGHLIGHT=$4
-		shift
 		shift
 		shift
 		shift
@@ -309,11 +307,11 @@ function cod {
 		  ;;
 		recode)
 		  shift
-		  recode "${YAML}" "${PROJECT}" "${ITERATION}" "${CODE}" "$@"
+		  recode "$YAML" "$PROJECT" "$ITERATION" "$CODE"  "$@"
 		  ;;
 		precode)
 		  shift
-		  precode "$YAML" "$PROJECT" "$ITERATION" "$HIGHLIGHT" "$@"
+		  precode "$YAML" "$PROJECT" "$ITERATION" "$@"
 		  ;;
 		print_piece)
 		  shift
