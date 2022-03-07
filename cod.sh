@@ -268,7 +268,7 @@ function cod {
 	case $1 in
 		print_piece)
 		  shift
-		  print_piece $1 $HIGHLIGHT
+		  print_piece $HIGHLIGHT $@
 		  ;;
 		precode)
 		  shift
