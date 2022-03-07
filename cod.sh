@@ -124,7 +124,7 @@ function cod {
 			# This needs to be a function precode_piece.
 
 			# |$ means every line is printed.
-			print_piece "${HIGHLIGHT}|$" $i
+			print_piece $i
 			EXIT="`echo $'\nx: exit'`"
 			PROMPT="`echo $'\n> '`"
 			while [[ ! $short_code == "x" ]]; do
