@@ -269,7 +269,7 @@ function cod {
 	case $1 in
 		print_piece)
 		  shift
-		  print_piece $HIGHLIGHT $@
+		  print_piece "${HIGHLIGHT}" "$@"
 		  ;;
 		precode)
 		  shift
