@@ -6,6 +6,8 @@ function cod {
 	# Make sure not to reuse prior CODE variable and keep ITERATION
 	# for resume flag.
 	CODE=""
+	HIGHLIGHT=""
+	PROJECT=""
 	PRIOR_ITERATION=$ITERATION
 
 	source "$(dirname ${BASH_SOURCE[0]})/utility/utility.sh"
@@ -79,8 +81,29 @@ function cod {
 		done
 	}
 
-	# function code {
-	# }
+	function precode {
+		YAML=$1
+		PROJECT=$2
+		HIGHLIGHT=$3
+		ITERATION=$4
+		shift
+		shift
+		shift
+		shift
+		OPTIONS=$( cat $YAML | yq ".codes.${PROJECT}" )
+		TO_CODE=$( filter_iteration $ITERATION $@ )
+
+		# For debugging
+		echo "Highlight: $HIGHLIGHT"	
+
+		for i in $TO_CODE; do
+			# echo $i
+			print_piece $i $HIGHLIGHT
+			read -p "$OPTIONS" short_code
+			code=$( cat $YAML | yq ".codes.${PROJECT}.${short_code}" )
+			insert_code $code $i $ITERATION
+		done
+	}
 
 	# #TODO: code document--show document(s) and insert codes.
 	# function code {
@@ -159,6 +182,11 @@ function cod {
 			  shift
 			  shift
 			  ;;
+			-h|-H|--highlight)
+			  HIGHLIGHT="$2"
+			  shift
+			  shift
+			  ;;
 			-*|--*)
 			  echo "Unknown option $1."
 			  return 1
@@ -191,9 +219,14 @@ function cod {
 	# echo "Short code: $SHORT_CODE"
 	# echo "YAML: $YAML"
 	# echo "Project: $PROJECT"
+	# echo "Highlight: $HIGHLIGHT"
 	# echo "Positional arguments: $@"
 
 	case $1 in
+		precode)
+		  shift
+		  precode "${YAML}" "${PROJECT}" "${HIGHLIGHT}" "$ITERATION" "$@"
+		  ;;
 		remove_code)
 		  shift
 		  remove_code "${CODE}" "$@"

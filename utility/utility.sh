@@ -64,11 +64,13 @@ function insert_iteration_ {
 
 function print_piece {
 	FILE=$1
+	HIGHLIGHT=$2
 	NAME="$(basename ${FILE})"
 	BAR="####################################"
 
 	printf "\n${BAR}${BAR}\nStart of ${NAME}\n${BAR}${BAR}\n\n"
 	# Use $ in grep to make sure that every line is printed.
-	grep -E -i -z -s --color=auto "KXL|Keystone(\s)?XL|$" "${FILE}"
+	#TODO: If no match, print the whole file with notice thereof.
+	grep -E -i -z -s --color=auto ${HIGHLIGHT} ${FILE}
 	printf "\n\n${BAR}${BAR}\nEnd of ${NAME}\n${BAR}${BAR}\n\n"
 }
