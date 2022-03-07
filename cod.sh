@@ -321,5 +321,9 @@ function cod {
 		  shift
 		  remove_code "${CODE}" "$@"
 		  ;;
+		*)
+		  echo "Not a valid command."
+		  exit 1
+		  ;;
 	esac
 }
