@@ -146,12 +146,27 @@ function cod {
 	# 	# yq sth
 	# }
 
-	# function recode {
+	# Select all pieces in one iteration that received a specific code
+	# then set a new code or codes and remove the old one.
+	function recode {
+		YAML=$1
+		PROJECT=$2
+		ITERATION=$3
+		CODE=$4
+		shift
+		shift
+		shift
 
-	# 	filter_folder $CODE
-	# 	precode_piece
-	# 	remove_code $CODE
-	# }
+		# This does the opposite of the filter_iteration function.
+		# Select files only if they were in the iteration.
+		to_code=$(grep -l -E "^\* @iteration.*${ITERATION}" $@)
+		to_code=$(filter_coding "$CODE" "$to_code")
+
+		for i in to_code; do
+			precode "${YAML}" "${PROJECT}" "${ITERATION}" "$i"
+			remove_code "${CODE}" "$i"
+		done
+	}
 
 	# #TODO: code document--show document(s) and insert codes.
 	# function code {
@@ -289,6 +304,10 @@ function cod {
 		filter_folder)
 		  shift
 		  filter_folder "${CODE}" "${ITERATION}" "$@"
+		  ;;
+		recode)
+		  shift
+		  recode "${YAML}" "${PROJECT}" "${ITERATION}" "${CODE}" "$@"
 		  ;;
 		precode)
 		  shift
