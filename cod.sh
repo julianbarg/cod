@@ -12,6 +12,7 @@ function cod {
 	PRIOR_ITERATION=$ITERATION
 	ITERATION=""
 	VERBOSE=""
+	SHORT_CODE=""
 
 	source "$(dirname ${BASH_SOURCE[0]})/utility/utility.sh"
 
