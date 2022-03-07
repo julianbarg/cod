@@ -8,7 +8,10 @@ function cod {
 	CODE=""
 	HIGHLIGHT=""
 	PROJECT=""
+	RESUME=""
 	PRIOR_ITERATION=$ITERATION
+	ITERATION=""
+	VERBOSE=""
 
 	source "$(dirname ${BASH_SOURCE[0]})/utility/utility.sh"
 
@@ -150,7 +153,7 @@ function cod {
 			#TODO: There needs to be some logic to warn about the first
 			# three arguments cooccurring.
 			-r|-R|--resume)
-			  RESUME="$1"
+			  RESUME=true
 			  shift
 			  ;;
 			-n|--new)
@@ -208,7 +211,7 @@ function cod {
 	if [[ -z $YAML ]]; then
 		YAML=$DEFAULT_YAML
 	fi
-	if [[ ! -z $RESUME ]]; then
+	if [ "$RESUME" = true ]; then
 		#TODO: what about -n and -i?
 		ITERATION=$PRIOR_ITERATION
 	fi
