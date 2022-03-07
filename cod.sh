@@ -140,6 +140,7 @@ function cod {
 				fi
 			done
 			selection=""
+			# To see verbose output and see that input is registered.
 			sleep .1
 			# Make sure the iteration is entered even if no code set?
 			# insert_iteration_ $ITERATION $i
