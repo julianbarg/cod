@@ -81,7 +81,6 @@ function cod {
 		}
 
 		for i ; do
-			echo $i
 			# Some checks here are redundant, like checking for timestamp
 			# if coding section is just inserted by mk_coding, but whatever.
 			# Could eventually figure out how to use mk_coding return 
@@ -131,10 +130,10 @@ function cod {
 			# |$ means every line is printed.
 			print_piece $i
 			EXIT="`echo $'\nx: exit'`"
-			PROMPT="`echo $'\n> '`"
 			selection=""
+			echo "${OPTIONS}${EXIT}"
 			while [[ ! $selection == "x" ]]; do
-				read -p "${OPTIONS}${EXIT}${PROMPT}" selection
+				read -p ">" selection
 				code=$( cat $YAML | yq ".${PROJECT}.codes.${selection}" )
 				insert_code "${code}" "${ITERATION}" $i
 			done
