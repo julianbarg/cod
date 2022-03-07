@@ -16,15 +16,13 @@ function cod {
 	source "$(dirname ${BASH_SOURCE[0]})/utility/utility.sh"
 
 	function print_piece {
-		HIGHLIGHT=$1
-		shift
 		BAR="####################################"
 		for i; do
 			NAME="$(basename $i)"
 			printf "\n${BAR}${BAR}\nStart of ${NAME}\n${BAR}${BAR}\n\n"
 			# Use $ in grep to make sure that every line is printed.
 			#TODO: If no match, print the whole file with notice thereof.
-			grep -E -i -z -s --color=auto ${HIGHLIGHT} ${i}
+			grep -E -i -z -s --color=auto "${HIGHLIGHT}|$" ${i}
 			printf "\n\n${BAR}${BAR}\nEnd of ${NAME}\n${BAR}${BAR}\n\n"
 		done
 	}
@@ -282,7 +280,7 @@ function cod {
 		#TODO: Add some error if project/code does not exist.
 		CODE=$( cat $YAML | yq ".codes.${PROJECT}.${SHORT_CODE}" )
 	fi
-	if [[ ! -z $PROJECT && -z HIGHLIGHT ]]; then
+	if [[ ! -z $PROJECT && HIGHLIGHT="" ]]; then
 		HIGHLIGHT=$( cat $YAML | yq ".${PROJECT}.highlights" | \
 			yq 'join("|")')
 	fi 
@@ -319,7 +317,7 @@ function cod {
 		  ;;
 		print_piece)
 		  shift
-		  print_piece "${HIGHLIGHT}" "$@"
+		  print_piece "$@"
 		  ;;
 		remove_code)
 		  shift
