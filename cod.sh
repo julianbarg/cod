@@ -126,11 +126,16 @@ function cod {
 			# This needs to be a function precode_piece.
 
 			# |$ means every line is printed.
-			print_piece "${HIGHLIGHT}|$" $i 
-			NEWLINE="`echo $'\n> '`"
-			read -p "$OPTIONS$NEWLINE" short_code
-			code=$( cat $YAML | yq ".codes.${PROJECT}.${short_code}" )
-			insert_code $code $i $ITERATION
+			print_piece "${HIGHLIGHT}|$" $i
+			EXIT="`echo $'\nx: exit'`"
+			PROMPT="`echo $'\n> '`"
+			while [[ ! $short_code == "x" ]]; do
+				read -p "${OPTIONS}${EXIT}${PROMPT}" short_code
+				code=$( cat $YAML | yq ".codes.${PROJECT}.${short_code}" )
+				insert_code $code $i $ITERATION
+			done
+			# Make sure the iteration is entered even if no code set?
+			# insert_iteration_ $ITERATION $i
 		done
 	}
 
