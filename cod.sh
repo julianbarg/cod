@@ -269,7 +269,7 @@ function cod {
 	fi
 	if [[ ! -z $SHORT_CODE && ! -z $PROJECT ]]; then
 		#TODO: Add some error if project/code does not exist.
-		CODE=$( cat $YAML | yq ".codes.${PROJECT}.${SHORT_CODE}" )
+		CODE=$( cat $YAML | yq ".${PROJECT}.codes.${SHORT_CODE}" )
 	fi
 	if [[ ! -z $PROJECT && HIGHLIGHT="" ]]; then
 		HIGHLIGHT=$( cat $YAML | yq ".${PROJECT}.highlights" | \
