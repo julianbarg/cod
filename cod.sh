@@ -102,6 +102,8 @@ function cod {
 		YAML=$1
 		PROJECT=$2
 		ITERATION=$3
+		HIGHLIGHT=$4
+		shift
 		shift
 		shift
 		shift
@@ -118,8 +120,6 @@ function cod {
 	  	# fi
 
 		OPTIONS=$( cat $YAML | yq ".${PROJECT}.codes" )
-		HIGHLIGHT=$( cat $YAML | yq ".${PROJECT}.highlights" | \
-			yq 'join("|")')
 		TO_CODE=$( filter_iteration $ITERATION $@ )
 
 		for i in $TO_CODE; do
@@ -282,6 +282,10 @@ function cod {
 		#TODO: Add some error if project/code does not exist.
 		CODE=$( cat $YAML | yq ".codes.${PROJECT}.${SHORT_CODE}" )
 	fi
+	if [[ ! -z $PROJECT && -z HIGHLIGHT ]]; then
+		HIGHLIGHT=$( cat $YAML | yq ".${PROJECT}.highlights" | \
+			yq 'join("|")')
+	fi 
 
 	# For debugging:
 	if [ "$VERBOSE" = true ]; then
@@ -311,7 +315,7 @@ function cod {
 		  ;;
 		precode)
 		  shift
-		  precode "${YAML}" "${PROJECT}" "${ITERATION}" "$@"
+		  precode "$YAML" "$PROJECT" "$ITERATION" "$HIGHLIGHT" "$@"
 		  ;;
 		print_piece)
 		  shift
