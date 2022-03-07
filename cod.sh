@@ -109,10 +109,13 @@ function cod {
 			echo "No project selected!"
 	  		exit 1
 	  	fi
-	  	if [[ -z ITERATION ]];
-	  		echo "No iteration specified!"
-	  		exit 1
-	  	fi
+	  	
+	  	#TODO: Need to figure out a way to accomodate other ways of
+	  	# iterating, such as recoding and removing codes on the way.
+	  	# if [[ -z ITERATION ]];
+	  	# 	echo "No iteration specified!"
+	  	# 	exit 1
+	  	# fi
 
 		OPTIONS=$( cat $YAML | yq ".${PROJECT}.codes" )
 		HIGHLIGHT=$( cat $YAML | yq ".${PROJECT}.highlights" | \
@@ -121,7 +124,7 @@ function cod {
 
 		for i in $TO_CODE; do
 			# This needs to be a function precode_piece.
-			
+
 			# |$ means every line is printed.
 			print_piece "${HIGHLIGHT}|$" $i 
 			NEWLINE="`echo $'\n> '`"
