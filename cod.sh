@@ -101,22 +101,29 @@ function cod {
 	function precode {
 		YAML=$1
 		PROJECT=$2
-		HIGHLIGHT=$3
-		ITERATION=$4
+		ITERATION=$3
 		shift
 		shift
 		shift
-		shift
-		OPTIONS=$( cat $YAML | yq ".codes.${PROJECT}" )
+		if [[ -z PROJECT ]]; then
+			echo "No project selected!"
+	  		exit 1
+	  	fi
+	  	if [[ -z ITERATION ]];
+	  		echo "No iteration specified!"
+	  		exit 1
+	  	fi
+
+		OPTIONS=$( cat $YAML | yq ".${PROJECT}.codes" )
+		HIGHLIGHT=$( cat $YAML | yq ".${PROJECT}.highlights" | \
+			yq 'join("|")')
 		TO_CODE=$( filter_iteration $ITERATION $@ )
 
-		# For debugging
-		echo "Highlight: $HIGHLIGHT"	
-
 		for i in $TO_CODE; do
-			# This needs to be a function precode_piece
-			# echo $i
-			print_piece $HIGHLIGHT $i 
+			# This needs to be a function precode_piece.
+			
+			# |$ means every line is printed.
+			print_piece "${HIGHLIGHT}|$" $i 
 			NEWLINE="`echo $'\n> '`"
 			read -p "$OPTIONS$NEWLINE" short_code
 			code=$( cat $YAML | yq ".codes.${PROJECT}.${short_code}" )
@@ -273,7 +280,7 @@ function cod {
 		  ;;
 		precode)
 		  shift
-		  precode "${YAML}" "${PROJECT}" "${HIGHLIGHT}" "$ITERATION" "$@"
+		  precode "${YAML}" "${PROJECT}" "${ITERATION}" "$@"
 		  ;;
 		remove_code)
 		  shift
