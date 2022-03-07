@@ -204,7 +204,10 @@ function cod {
 			  ;;
 		esac
 	done
-	set -- "${POSITIONAL_ARGS[@]}"
+	if [ ! -t 0 ]; then
+	    piped=$(cat)
+	fi
+	set -- "${POSITIONAL_ARGS[@]} $piped"
 
 	# Some sensible logic for setting arguments.
 
