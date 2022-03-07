@@ -61,6 +61,11 @@ function cod {
 		shift
 		shift
 
+		if [ "$VERBOSE" = true ]; then
+			echo "insert_code--code: $CODE"
+			echo "insert_code--iteration: $ITERATION"
+		fi
+
 		# Utility function that handles insertion of code.
 		function insert_code_ {
 			CODE=$1
