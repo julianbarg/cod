@@ -112,7 +112,12 @@ function cod {
 	  	# fi
 
 		OPTIONS=$( cat $YAML | yq ".${PROJECT}.codes" )
-		TO_CODE=$( filter_iteration $ITERATION $@ )
+
+		if [[ ! -z $ITERATION ]]; then
+			TO_CODE=$( filter_iteration $ITERATION $@ )
+		else
+			TO_CODE="$@"
+		fi
 
 		for i in $TO_CODE; do
 			# This needs to be a function precode_piece.
