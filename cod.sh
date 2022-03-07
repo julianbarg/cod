@@ -187,6 +187,10 @@ function cod {
 			  shift
 			  shift
 			  ;;
+			-v|-V|--verbose)
+			  VERBOSE=true
+			  shift
+			  ;;
 			-*|--*)
 			  echo "Unknown option $1."
 			  return 1
@@ -214,13 +218,15 @@ function cod {
 	fi
 
 	# For debugging:
-	# echo "Iteration: $ITERATION"
-	# echo "Code: $CODE"
-	# echo "Short code: $SHORT_CODE"
-	# echo "YAML: $YAML"
-	# echo "Project: $PROJECT"
-	# echo "Highlight: $HIGHLIGHT"
-	# echo "Positional arguments: $@"
+	if [ "$VERBOSE" = true ]; then
+		echo "Iteration: $ITERATION"
+		echo "Code: $CODE"
+		echo "Short code: $SHORT_CODE"
+		echo "YAML: $YAML"
+		echo "Project: $PROJECT"
+		echo "Highlight: $HIGHLIGHT"
+		echo "Positional arguments: $@"
+	fi
 
 	case $1 in
 		precode)
