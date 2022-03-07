@@ -263,7 +263,13 @@ function cod {
 		echo "Positional arguments: $@"
 	fi
 
+	# Call subfunctions
+
 	case $1 in
+		print_piece)
+		  shift
+		  print_piece $1 $HIGHLIGHT
+		  ;;
 		precode)
 		  shift
 		  precode "${YAML}" "${PROJECT}" "${HIGHLIGHT}" "$ITERATION" "$@"
