@@ -60,16 +60,3 @@ function insert_iteration_ {
 	 	sed -i -E "s/^\* @iteration.*/& $ITERATION/" $FILE
 	fi
 }
-
-function print_piece {
-	FILE=$1
-	HIGHLIGHT=$2
-	NAME="$(basename ${FILE})"
-	BAR="####################################"
-
-	printf "\n${BAR}${BAR}\nStart of ${NAME}\n${BAR}${BAR}\n\n"
-	# Use $ in grep to make sure that every line is printed.
-	#TODO: If no match, print the whole file with notice thereof.
-	grep -E -i -z -s --color=auto ${HIGHLIGHT} ${FILE}
-	printf "\n\n${BAR}${BAR}\nEnd of ${NAME}\n${BAR}${BAR}\n\n"
-}

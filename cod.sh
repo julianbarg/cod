@@ -15,6 +15,19 @@ function cod {
 
 	source "$(dirname ${BASH_SOURCE[0]})/utility/utility.sh"
 
+	function print_piece {
+		HIGHLIGHT=$1
+		NAME="$(basename ${FILE})"
+		BAR="####################################"
+		for i; do
+			printf "\n${BAR}${BAR}\nStart of ${NAME}\n${BAR}${BAR}\n\n"
+			# Use $ in grep to make sure that every line is printed.
+			#TODO: If no match, print the whole file with notice thereof.
+			grep -E -i -z -s --color=auto ${HIGHLIGHT} ${FILE}
+			printf "\n\n${BAR}${BAR}\nEnd of ${NAME}\n${BAR}${BAR}\n\n"
+		done
+	}
+
 	function filter_folder {
 		# Allows you to code a subset of documents based on a flag.
 		# Continue where you left off if coding iteration incomplete.
