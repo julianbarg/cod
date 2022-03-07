@@ -153,11 +153,14 @@ function cod {
 
 		# This does the opposite of the filter_iteration function.
 		# Select files only if they were in the iteration.
-		to_code=$(grep -l -E "^\* @iteration.*${ITERATION}" $@)
+		to_code=$(grep -l -E "^\* @iteration.*${ITERATION}" "$@")
 		to_code=$(filter_coding "$CODE" "$to_code")
 
-		for i in to_code; do
-			precode "${YAML}" "${PROJECT}" "${ITERATION}" "$i"
+		for i in $to_code; do
+			echo "Working on $i."
+			# $ITERATION is empty because we are only altering prior
+			# iteration
+			precode "" "$i"
 			remove_code "${CODE}" "$i"
 		done
 	}
