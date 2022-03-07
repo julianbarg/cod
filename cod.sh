@@ -160,6 +160,9 @@ function cod {
 		for i in $to_code; do
 			# $ITERATION is empty because we are only altering prior
 			# iteration
+			# There should be a better solution for this, but for now we 
+			# remove the old code before setting the new one in case it 
+			# may be the same.
 			remove_code "${CODE}" "$i"
 			precode "" "$i"
 		done
