@@ -301,7 +301,8 @@ function cod {
 		echo "YAML: $YAML"
 		echo "Project: $PROJECT"
 		echo "Highlight: $HIGHLIGHT"
-		echo "Positional arguments: $@"
+		more=$(($# - 3))
+		echo "Positional arguments: $1, $2, $3 and $more more."
 	fi
 
 	# Call subfunctions
