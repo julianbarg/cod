@@ -189,36 +189,8 @@ function cod {
 		case $1 in 
 			#TODO: There needs to be some logic to warn about the first
 			# three arguments cooccurring.
-			-r|-R|--resume)
-			  RESUME=true
-			  shift
-			  ;;
-			-n|--new)
-			  ITERATION=$(date +"%m/%d/%Y_%H:%M")
-			  shift
-			  ;;
-			-i|-I|--iteration)
-			  ITERATION="$2"
-			  shift
-			  shift
-			  ;;
 			-c|-C|--code)
 			  CODE="$2"
-			  shift
-			  shift
-			  ;;
-			-s|-S|--short_code)
-			  SHORT_CODE="$2"
-			  shift
-			  shift
-			  ;;
-			-y|-Y|--yaml)
-			  YAML="$2"
-			  shift
-			  shift
-			  ;;
-			-p|-P|--project)
-			  PROJECT="$2"
 			  shift
 			  shift
 			  ;;
@@ -227,8 +199,36 @@ function cod {
 			  shift
 			  shift
 			  ;;
+			-i|-I|--iteration)
+			  ITERATION="$2"
+			  shift
+			  shift
+			  ;;
+			-n|--new)
+			  ITERATION=$(date +"%m/%d/%Y_%H:%M")
+			  shift
+			  ;;
+			-p|-P|--project)
+			  PROJECT="$2"
+			  shift
+			  shift
+			  ;;
+			-r|-R|--resume)
+			  RESUME=true
+			  shift
+			  ;;
+			-s|-S|--short_code)
+			  SHORT_CODE="$2"
+			  shift
+			  shift
+			  ;;
 			-v|-V|--verbose)
 			  VERBOSE=true
+			  shift
+			  ;;
+			-y|-Y|--yaml)
+			  YAML="$2"
+			  shift
 			  shift
 			  ;;
 			-*|--*)
@@ -274,25 +274,21 @@ function cod {
 	# Call subfunctions
 
 	case $1 in
-		print_piece)
+		insert_code)
 		  shift
-		  print_piece "${HIGHLIGHT}" "$@"
-		  ;;
-		precode)
-		  shift
-		  precode "${YAML}" "${PROJECT}" "${ITERATION}" "$@"
-		  ;;
-		remove_code)
-		  shift
-		  remove_code "${CODE}" "$@"
+		  insert_code "${CODE}" "${ITERATION}" "$@"
 		  ;;
 		filter_folder)
 		  shift
 		  filter_folder "${CODE}" "${ITERATION}" "$@"
 		  ;;
-		insert_code)
+		precode)
 		  shift
-		  insert_code "${CODE}" "${ITERATION}" "$@"
+		  precode "${YAML}" "${PROJECT}" "${ITERATION}" "$@"
+		  ;;
+		print_piece)
+		  shift
+		  print_piece "${HIGHLIGHT}" "$@"
 		  ;;
 		remove_code)
 		  shift
