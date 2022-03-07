@@ -158,11 +158,10 @@ function cod {
 		to_code=$(filter_coding "$CODE" "$to_code")
 
 		for i in $to_code; do
-			echo "Working on $i."
 			# $ITERATION is empty because we are only altering prior
 			# iteration
-			precode "" "$i"
 			remove_code "${CODE}" "$i"
+			precode "" "$i"
 		done
 	}
 
