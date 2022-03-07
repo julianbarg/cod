@@ -15,7 +15,6 @@ function filter_iteration {
 
 function filter_coding {
 	CODE=$1
-	# echo "Code: $CODE"
 	shift
 	echo $(grep -l -E "^\* #${CODE}$" $@)
 }
