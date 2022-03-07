@@ -17,9 +17,10 @@ function cod {
 
 	function print_piece {
 		HIGHLIGHT=$1
+		shift
 		BAR="####################################"
 		for i; do
-			NAME="$(basename ${i})"
+			NAME="$(basename $i)"
 			printf "\n${BAR}${BAR}\nStart of ${NAME}\n${BAR}${BAR}\n\n"
 			# Use $ in grep to make sure that every line is printed.
 			#TODO: If no match, print the whole file with notice thereof.
