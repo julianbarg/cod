@@ -17,13 +17,13 @@ function cod {
 
 	function print_piece {
 		HIGHLIGHT=$1
-		NAME="$(basename ${FILE})"
 		BAR="####################################"
 		for i; do
+			NAME="$(basename ${i})"
 			printf "\n${BAR}${BAR}\nStart of ${NAME}\n${BAR}${BAR}\n\n"
 			# Use $ in grep to make sure that every line is printed.
 			#TODO: If no match, print the whole file with notice thereof.
-			grep -E -i -z -s --color=auto ${HIGHLIGHT} ${FILE}
+			grep -E -i -z -s --color=auto ${HIGHLIGHT} ${i}
 			printf "\n\n${BAR}${BAR}\nEnd of ${NAME}\n${BAR}${BAR}\n\n"
 		done
 	}
