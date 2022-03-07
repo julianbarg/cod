@@ -97,11 +97,7 @@ function cod {
 	}
 
 	function precode {
-		YAML=$1
-		PROJECT=$2
-		ITERATION=$3
-		shift
-		shift
+		ITERATION=$1
 		shift
 		if [[ -z PROJECT ]]; then
 			echo "No project selected!"
@@ -145,11 +141,8 @@ function cod {
 	# Select all pieces in one iteration that received a specific code
 	# then set a new code or codes and remove the old one.
 	function recode {
-		YAML=$1
-		PROJECT=$2
-		ITERATION=$3
-		CODE=$4
-		shift
+		ITERATION=$1
+		CODE=$2
 		shift
 		shift
 
@@ -307,11 +300,11 @@ function cod {
 		  ;;
 		recode)
 		  shift
-		  recode "$YAML" "$PROJECT" "$ITERATION" "$CODE"  "$@"
+		  recode "$ITERATION" "$CODE" "$@"
 		  ;;
 		precode)
 		  shift
-		  precode "$YAML" "$PROJECT" "$ITERATION" "$@"
+		  precode "$ITERATION" "$@"
 		  ;;
 		print_piece)
 		  shift
