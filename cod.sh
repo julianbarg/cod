@@ -171,7 +171,7 @@ function cod {
 			# remove the old code before setting the new one in case it 
 			# may be the same.
 			remove_code "${CODE}" "$i"
-			precode "" "$i"
+			( precode "" "$i" )
 		done
 	}
 
