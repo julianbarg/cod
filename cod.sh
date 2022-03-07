@@ -113,13 +113,29 @@ function cod {
 		echo "Highlight: $HIGHLIGHT"	
 
 		for i in $TO_CODE; do
+			# This needs to be a function precode_piece
 			# echo $i
-			print_piece $i $HIGHLIGHT
-			read -p "$OPTIONS" short_code
+			print_piece $HIGHLIGHT $i 
+			NEWLINE="`echo $'\n> '`"
+			read -p "$OPTIONS$NEWLINE" short_code
 			code=$( cat $YAML | yq ".codes.${PROJECT}.${short_code}" )
 			insert_code $code $i $ITERATION
 		done
 	}
+
+	# function stash_codes {
+	# 	YAML=$1
+	# 	PROJECT=$2
+	# 	# codes is $@ and use first letter
+	# 	# yq sth
+	# }
+
+	# function recode {
+
+	# 	filter_folder $CODE
+	# 	precode_piece
+	# 	remove_code $CODE
+	# }
 
 	# #TODO: code document--show document(s) and insert codes.
 	# function code {
