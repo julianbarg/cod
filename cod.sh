@@ -7,7 +7,7 @@ function cod {
 	# for resume flag.
 	CODE=""
 	HIGHLIGHT=""
-	PROJECT=""
+	# PROJECT=""
 	RESUME=""
 	PRIOR_ITERATION=$ITERATION
 	ITERATION=""
