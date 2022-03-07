@@ -106,6 +106,7 @@ function cod {
 	  	
 	  	#TODO: Need to figure out a way to accomodate other ways of
 	  	# iterating, such as recoding and removing codes on the way.
+	  	# Iteration needs to be otional.
 	  	# if [[ -z ITERATION ]];
 	  	# 	echo "No iteration specified!"
 	  	# 	exit 1
@@ -120,7 +121,6 @@ function cod {
 		fi
 
 		for i in $TO_CODE; do
-			# This needs to be a function precode_piece.
 
 			# |$ means every line is printed.
 			print_piece $i
