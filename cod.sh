@@ -135,7 +135,7 @@ function cod {
 			while [[ ! $selection == "x" ]]; do
 				read -p ">" selection
 				code=$( cat $YAML | yq ".${PROJECT}.codes.${selection}" )
-				if [[ ! selection == "x" ]]; do
+				if [[ ! $selection == "x" ]]; then
 					insert_code "${code}" "${ITERATION}" $i
 				fi
 			done
