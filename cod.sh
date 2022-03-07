@@ -132,11 +132,13 @@ function cod {
 			print_piece $i
 			EXIT="`echo $'\nx: exit'`"
 			PROMPT="`echo $'\n> '`"
-			while [[ ! $short_code == "x" ]]; do
-				read -p "${OPTIONS}${EXIT}${PROMPT}" short_code
-				code=$( cat $YAML | yq ".codes.${PROJECT}.${short_code}" )
-				insert_code $code $i $ITERATION
+			selection=""
+			while [[ ! $selection == "x" ]]; do
+				read -p "${OPTIONS}${EXIT}${PROMPT}" selection
+				code=$( cat $YAML | yq ".${PROJECT}.codes.${selection}" )
+				insert_code "${code}" "${ITERATION}" $i
 			done
+			selection=""
 			# Make sure the iteration is entered even if no code set?
 			# insert_iteration_ $ITERATION $i
 		done
