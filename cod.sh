@@ -140,6 +140,7 @@ function cod {
 				fi
 			done
 			selection=""
+			sleep .1
 			# Make sure the iteration is entered even if no code set?
 			# insert_iteration_ $ITERATION $i
 		done
