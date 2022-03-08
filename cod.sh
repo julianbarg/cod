@@ -131,7 +131,7 @@ function cod {
 				code="$( cat $YAML | yq ".${PROJECT}.codes.${selection}" )"
 				if [[ "$selection" != "x" && "$code" != "null" ]]; then
 					insert_code "${code}" "${ITERATION}" $i
-				elif [[ $code=="null" ]]; then
+				elif [[ "$selection" != "x" && "$code"=="null" ]]; then
 					echo "Invalid code--choose again."
 				fi
 			done
