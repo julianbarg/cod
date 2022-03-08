@@ -251,6 +251,9 @@ function cod {
 
 	# Some sensible logic for setting arguments.
 
+	#TODO: needs some validation of YAML. Does yamllint check whether 
+	# dictionary in yaml file contains duplicate?
+
 	if [[ -z $YAML ]]; then
 		YAML=$DEFAULT_YAML
 	fi
