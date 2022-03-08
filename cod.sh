@@ -3,20 +3,13 @@ DEFAULT_YAML="/$HOME/.config/cod/cod.yaml"
 
 function cod {
 
-	# Make sure not to reuse prior CODE variable and keep ITERATION
-	# for resume flag.
-	CODE=""
-	HIGHLIGHT=""
-	# PROJECT=""
-	RESUME=""
-	PRIOR_ITERATION=$ITERATION
-	ITERATION=""
-	VERBOSE=""
-	SHORT_CODE=""
-
 	source "$(dirname ${BASH_SOURCE[0]})/utility/utility.sh"
 
+	## Subfunctions to call
+
 	function print_piece {
+		#TODO: add optional flag to highlight additional word.
+		# Append to $HIGLIGHT separated by ```|```.
 		BAR="####################################"
 		for i; do
 			NAME="$(basename $i)"
@@ -31,6 +24,7 @@ function cod {
 	function filter_folder {
 		# Allows you to code a subset of documents based on a flag.
 		# Continue where you left off if coding iteration incomplete.
+		# Pipe filter_folder into precode or other function to use.
 		CODE=$1
 		ITERATION=$2
 		shift
@@ -42,11 +36,9 @@ function cod {
 			echo "No filter provided."
 			exit 1
 		fi 
-
 		if [ ! -z $ITERATION ]; then
 			to_code="$( filter_iteration $ITERATION $to_code)"
 		fi
-
 		if [ ! -z $CODE ]; then
 			to_code="$( filter_coding $CODE $to_code)"
 		fi
@@ -89,6 +81,7 @@ function cod {
 		done
 	}
 
+	# Remove a specific code from documents.
 	function remove_code {
 		# This would not work if the code exists more than once for some
 		# reason, but I think I can handle that later.
@@ -101,6 +94,8 @@ function cod {
 		done
 	}
 
+	# Open documents one by one and enter selected code at bottom of
+	# document with timestamp ($ITERATION).
 	function precode {
 		ITERATION=$1
 		shift
@@ -109,9 +104,9 @@ function cod {
 	  		exit 1
 	  	fi
 	  	
-	  	#TODO: Need to figure out a way to accomodate other ways of
-	  	# iterating, such as recoding and removing codes on the way.
-	  	# Iteration needs to be otional.
+	  	#TODO: Need to figure out a way to accommodate other ways of
+	  	# iterating, such as recoding--opening docs and replacing code.
+	  	# $ITERATION needs to be optional until then to accommodate.
 	  	# if [[ -z ITERATION ]];
 	  	# 	echo "No iteration specified!"
 	  	# 	exit 1
@@ -127,7 +122,6 @@ function cod {
 
 		for i in $TO_CODE; do
 
-			# |$ means every line is printed.
 			print_piece $i
 			EXIT="`echo $'\nx: exit'`"
 			selection=""
@@ -147,13 +141,6 @@ function cod {
 		done
 	}
 
-	# function stash_codes {
-	# 	YAML=$1
-	# 	PROJECT=$2
-	# 	# codes is $@ and use first letter
-	# 	# yq sth
-	# }
-
 	# Select all pieces in one iteration that received a specific code
 	# then set a new code or codes and remove the old one.
 	function recode {
@@ -161,6 +148,8 @@ function cod {
 		CODE=$2
 		shift
 		shift
+		#TODO: find a way to keep track of which documents have been 
+		# recoded and which still need to.
 
 		# This does the opposite of the filter_iteration function.
 		# Select files only if they were in the iteration.
@@ -172,48 +161,27 @@ function cod {
 			# iteration
 			# There should be a better solution for this, but for now we 
 			# remove the old code before setting the new one in case it 
-			# may be the same.
+			# may be the same. Eventually, we should check if new codes
+			# are set before removing old ones.
 			remove_code "${CODE}" "$i"
 			( precode "" "$i" )
 		done
 	}
 
-	# #TODO: code document--show document(s) and insert codes.
-	# function code {
-	# 	FILE=$1
-	# 	CODES=$2
-	# 	ITERATION=$3
-	# 	# Optional
-	# 	CODE=$4
-	# }
+	## Parsing arguments and calling function.
 
-	# #TODO: replace code $CODE in document(s) with code $NEW_CODE.
-	# # Or if $NEW_CODE is not provided, show documents and provide new
-	# # codes for each and replace the old one with new one.
-	# # Just needs to remove string and call insert_code.
-	# function recode {
-	#
-	# }
-
-	# # Create the section with codes for doc if it does not exist.
-	# function mk_coding {
-	# 	FILE=$1
-	# 	if [[ $(grep -L -E "^## Codes$" $FILE) ]]; then
-	# 		echo -e "\n\n## Codes\n\n* @iteration" >> $FILE
-	# 	fi
-	# 	return
-	# }
-
-	# #TODO: Open documents one by one, show, and insert code based on
-	# #YAML-provided list of codes. May also allow non-YAML provided codes?
-	# function code_folder {
-	# 	FOLDER=$1
-	# 	CODES=$2
-	# 	ITERATION=$3
-	# 	# ITERATION should eventually be cashed.
-	#
-	# 	code_document $file $CODES
-	# }
+	# Make sure not to reuse prior CODE variable and keep ITERATION
+	# for resume flag.
+	CODE=""
+	HIGHLIGHT=""
+	RESUME=""
+	# We store $PRIOR_ITERATION to allow for use of --resume flag.
+	PRIOR_PROJECT=$PROJECT
+	PROJECT=""
+	PRIOR_ITERATION=$ITERATION
+	ITERATION=""
+	VERBOSE=""
+	SHORT_CODE=""
 
 	# Parse arguments
 
@@ -287,6 +255,7 @@ function cod {
 	if [ "$RESUME" = true ]; then
 		#TODO: what about -n and -i?
 		ITERATION=$PRIOR_ITERATION
+		PROJECT=$PRIOR_PROJECT
 	fi
 	if [[ ! -z $SHORT_CODE && ! -z $PROJECT ]]; then
 		#TODO: Add some error if project/code does not exist.
