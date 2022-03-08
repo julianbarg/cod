@@ -128,9 +128,11 @@ function cod {
 			echo "${OPTIONS}${EXIT}"
 			while [[ ! $selection == "x" ]]; do
 				read -p ">" selection
-				code=$( cat $YAML | yq ".${PROJECT}.codes.${selection}" )
-				if [[ ! $selection == "x" ]]; then
+				code="$( cat $YAML | yq ".${PROJECT}.codes.${selection}" )"
+				if [[ "$selection" != "x" && "$code" != "null" ]]; then
 					insert_code "${code}" "${ITERATION}" $i
+				elif [[ $code=="null" ]]; then
+					echo "Invalid code--choose again."
 				fi
 			done
 			selection=""
