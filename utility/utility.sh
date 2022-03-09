@@ -60,3 +60,38 @@ function insert_iteration_ {
 	 	sed -i -E "s/^\* @iteration.*/& $ITERATION/" $FILE
 	fi
 }
+
+function print_full {
+	PIECE=$1
+	NAME="$(basename ${PIECE})"
+	printf "\n${BAR}${BAR}\nStart of ${NAME}\n${BAR}${BAR}\n\n"
+	# Use $ in grep to make sure that every line is printed.
+	#TODO: If no match, print the whole file with notice thereof.
+	# This would support longer phrases for search.
+	grep -E -i -z -s --color=auto "${HIGHLIGHT}|$" ${PIECE}
+	printf "\n\n${BAR}${BAR}\nEnd of ${NAME}\n${BAR}${BAR}\n\n"
+}
+
+function choice_preview {
+	PIECE=$1
+	NAME="$(basename ${PIECE})"
+	local choice
+	
+	if [ "${VERBOSE}" = true ]; then
+		echo "Piece: $PIECE"
+		echo "Highlight: $HIGHLIGHT"
+		echo "Show full: $FULL"
+	fi
+
+	if [[ $FULL!="" ]]; then
+		printf "\n${BAR}${BAR}\nPreview of ${NAME}${NEWLINE}"
+		# This means that "(\s)?" for space no longer works since there could
+		# be a line break. For now, use singe-word phrases only.
+		grep -E -i -s -C 3 -m 2 --color=auto "${HIGHLIGHT}" ${PIECE}
+		printf "${BAR}${BAR}\n"
+		read -p "Show full? (y/n) `echo $'\n> '`" choice
+	fi
+	if [[ $choice=="y" || $FULL!="" ]]; then
+		print_full $PIECE
+	fi
+}

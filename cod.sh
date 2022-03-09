@@ -13,12 +13,9 @@ function cod {
 		# Append to $HIGLIGHT separated by ```|```.
 		BAR="####################################"
 		for i; do
-			NAME="$(basename $i)"
-			printf "\n${BAR}${BAR}\nStart of ${NAME}\n${BAR}${BAR}\n\n"
-			# Use $ in grep to make sure that every line is printed.
-			#TODO: If no match, print the whole file with notice thereof.
-			grep -E -i -z -s --color=auto "${HIGHLIGHT}|$" ${i}
-			printf "\n\n${BAR}${BAR}\nEnd of ${NAME}\n${BAR}${BAR}\n\n"
+			# Preview
+			#TODO: provide option to select how many lines to preview.
+			choice_preview $i
 		done
 	}
 
@@ -128,7 +125,7 @@ function cod {
 			selection=""
 			echo "${OPTIONS}${EXIT}"
 			while [[ ! $selection == "x" ]]; do
-				read -p ">" selection
+				read -p "> " selection
 				code="$( cat $YAML | yq ".${PROJECT}.codes.${selection}" )"
 				if [[ "$selection" != "x" && "$code" != "null" ]]; then
 					insert_code "${code}" "${ITERATION}" $i
@@ -138,7 +135,7 @@ function cod {
 			done
 			selection=""
 			# To see verbose output and see that input is registered.
-			sleep .1
+			sleep .2
 			# Make sure the iteration is entered even if no code set?
 			# insert_iteration_ $ITERATION $i
 		done
@@ -185,6 +182,7 @@ function cod {
 	ITERATION=""
 	VERBOSE=""
 	SHORT_CODE=""
+	FULL=""
 
 	# Parse arguments
 
@@ -196,6 +194,10 @@ function cod {
 			-c|-C|--code)
 			  CODE="$2"
 			  shift
+			  shift
+			  ;;
+			-f|-F|--full)
+			  FULL=true
 			  shift
 			  ;;
 			-h|-H|--highlight)
@@ -281,6 +283,7 @@ function cod {
 		echo "Project: $PROJECT"
 		echo "Highlight: $HIGHLIGHT"
 		more=$(($# - 3))
+		echo "Full: $FULL"
 		echo "Positional arguments: $1, $2, $3 and $more more."
 	fi
 
