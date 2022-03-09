@@ -1,7 +1,8 @@
 #!/bin/bash
-DEFAULT_YAML="/$HOME/.config/cod/cod.yaml"
+
 
 function cod {
+	local DEFAULT_YAML="/$HOME/.config/cod/cod.yaml"
 
 	source "$(dirname ${BASH_SOURCE[0]})/utility/utility.sh"
 
