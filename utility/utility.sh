@@ -88,11 +88,14 @@ function choice_preview {
 	# Much better performance!
 	PREVIEW=".{450}(${HIGHLIGHT}).{450}"
 
+	printf "\n${BAR}${BAR}\n## Preview of ${NAME}:\n"
+	head "${PIECE}" -n 1
+	printf "${BAR}${BAR}\n\n"
+
 	# Add padding
 	sed -i "1s/^/${PADDING}\n/" "${PIECE}"
 	echo "${PADDING}" >> "${PIECE}"
-
-	printf "\n${BAR}${BAR}\nPreview of ${NAME}$\n\n"
+	
 	grep -E -i -m 1 -z -o --color=never "${PREVIEW}" "${PIECE}" \
 		| grep -E -m 1 -i -z --color=always "${HIGHLIGHT}" \
 		| sed -e 's/^[ \t]*//' -e 's/[ \t]*$//'
