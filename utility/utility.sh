@@ -83,7 +83,7 @@ function choice_preview {
 		echo "Show full: $FULL"
 	fi
 
-	printf "\n${BAR}${BAR}\nPreview of ${NAME}${NEWLINE}"
+	printf "\n${BAR}${BAR}\nPreview of ${NAME}${NEWLINE}\n"
 	# This means that "(\s)?" for space no longer works since there could
 	# be a line break. For now, use singe-word phrases only.
 	grep -E -i -s -C 5 -m 2 --color=auto "${HIGHLIGHT}" ${PIECE}
