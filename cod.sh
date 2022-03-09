@@ -3,6 +3,7 @@
 
 function cod {
 	local DEFAULT_YAML="/$HOME/.config/cod/cod.yaml"
+	local BAR="####################################"
 
 	source "$(dirname ${BASH_SOURCE[0]})/utility/utility.sh"
 
@@ -11,11 +12,12 @@ function cod {
 	function print_piece {
 		#TODO: add optional flag to highlight additional word.
 		# Append to $HIGLIGHT separated by ```|```.
-		BAR="####################################"
 		for i; do
-			# Preview
-			#TODO: provide option to select how many lines to preview.
-			choice_preview $i
+			if [ "$FULL" = true ]; then
+				print_full $i
+			else
+				choice_preview $i
+			fi
 		done
 	}
 

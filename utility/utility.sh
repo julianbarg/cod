@@ -83,15 +83,13 @@ function choice_preview {
 		echo "Show full: $FULL"
 	fi
 
-	if [[ $FULL!="" ]]; then
-		printf "\n${BAR}${BAR}\nPreview of ${NAME}${NEWLINE}"
-		# This means that "(\s)?" for space no longer works since there could
-		# be a line break. For now, use singe-word phrases only.
-		grep -E -i -s -C 3 -m 2 --color=auto "${HIGHLIGHT}" ${PIECE}
-		printf "${BAR}${BAR}\n"
-		read -p "Show full? (y/n) `echo $'\n> '`" choice
-	fi
-	if [[ $choice=="y" || $FULL!="" ]]; then
+	printf "\n${BAR}${BAR}\nPreview of ${NAME}${NEWLINE}"
+	# This means that "(\s)?" for space no longer works since there could
+	# be a line break. For now, use singe-word phrases only.
+	grep -E -i -s -C 5 -m 2 --color=auto "${HIGHLIGHT}" ${PIECE}
+	printf "${BAR}${BAR}\n"
+	read -p "Show full? (y/n) `echo $'\n> '`" choice
+	if [[ "$choice" == "y" ]]; then
 		print_full $PIECE
 	fi
 }
