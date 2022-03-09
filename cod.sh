@@ -2,8 +2,6 @@
 
 
 function cod {
-	local DEFAULT_YAML="/$HOME/.config/cod/cod.yaml"
-	local BAR="####################################"
 
 	source "$(dirname ${BASH_SOURCE[0]})/utility/utility.sh"
 
@@ -172,19 +170,19 @@ function cod {
 
 	## Parsing arguments and calling function.
 
-	# Make sure not to reuse prior CODE variable and keep ITERATION
-	# for resume flag.
-	CODE=""
-	HIGHLIGHT=""
-	RESUME=""
+	local DEFAULT_YAML="/$HOME/.config/cod/cod.yaml"
+	local BAR="####################################"
+	local CODE
+	local HIGHLIGHT
+	local RESUME
+	local VERBOSE
+	local SHORT_CODE
+	local FULL
 	# We store $PRIOR_ITERATION to allow for use of --resume flag.
 	PRIOR_PROJECT=$PROJECT
 	PROJECT=""
 	PRIOR_ITERATION=$ITERATION
 	ITERATION=""
-	VERBOSE=""
-	SHORT_CODE=""
-	FULL=""
 
 	# Parse arguments
 
@@ -284,6 +282,7 @@ function cod {
 		echo "YAML: $YAML"
 		echo "Project: $PROJECT"
 		echo "Highlight: $HIGHLIGHT"
+		#TODO: this may yield negative result.
 		more=$(($# - 3))
 		echo "Full: $FULL"
 		echo "Positional arguments: $1, $2, $3 and $more more."
