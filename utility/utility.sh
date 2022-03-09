@@ -81,12 +81,17 @@ function choice_preview {
 		echo "Piece: $PIECE"
 		echo "Highlight: $HIGHLIGHT"
 		echo "Show full: $FULL"
+		echo "Match: \S*.{500}(${HIGHLIGHT}).{500}\S*"
 	fi
 
 	printf "\n${BAR}${BAR}\nPreview of ${NAME}${NEWLINE}\n\n"
 	# This means that "(\s)?" for space no longer works since there could
 	# be a line break. For now, use singe-word phrases only.
-	grep -E -i -s -C 5 -m 2 --color=auto "${HIGHLIGHT}" ${PIECE}
+	#TODO: here is how to make it work--remove newlines and print phrase and
+	# limited number of words. I.e.: "\s\S*\s\S[\s]?*${PHRASE}[\s]?\S*\s etc.
+	grep -E -i -z -o --color=never "\S*.{500}(${HIGHLIGHT}).{500}\S*" "${PIECE}" \
+		| grep -E -i -z --color=always "${HIGHLIGHT}"
+	# grep -E -i -s -C 5 -m 2 --color=auto "${HIGHLIGHT}" ${PIECE}
 	printf "${BAR}${BAR}\n"
 
 	read -p "Show full? (y/n) `echo $'\n> '`" choice
