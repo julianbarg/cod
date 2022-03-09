@@ -85,15 +85,11 @@ function choice_preview {
 
 	PREVIEW="\S*.{500}(${HIGHLIGHT}).{500}\S*"
 
-	printf "\n${BAR}${BAR}\nPreview of ${NAME}${NEWLINE}\n\n"
-	# This means that "(\s)?" for space no longer works since there could
-	# be a line break. For now, use singe-word phrases only.
-	#TODO: here is how to make it work--remove newlines and print phrase and
-	# limited number of words. I.e.: "\s\S*\s\S[\s]?*${PHRASE}[\s]?\S*\s etc.
+	printf "\n${BAR}${BAR}\nPreview of ${NAME}$\n\n"
 	grep -E -i -m 1 -z -o --color=never "${PREVIEW}" "${PIECE}" \
 		| grep -E -m 1 -i -z --color=always "${HIGHLIGHT}"
 	# grep -E -i -s -C 5 -m 2 --color=auto "${HIGHLIGHT}" ${PIECE}
-	printf "\n${BAR}${BAR}\n"
+	printf "\n\nEnd of ${NAME} preview\n${BAR}${BAR}\n"
 
 	read -p "Show full? (y/n) `echo $'\n> '`" choice
 	if [[ "$choice" == "y" ]]; then
