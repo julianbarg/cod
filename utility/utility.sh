@@ -83,7 +83,9 @@ function choice_preview {
 		echo "Show full: $FULL"
 	fi
 
-	PREVIEW="\S*.{500}(${HIGHLIGHT}).{500}\S*"
+	# PREVIEW="\S*.{500}(${HIGHLIGHT}).{500}\S*"
+	# Much better performance!
+	PREVIEW=".{500}(${HIGHLIGHT}).{500}"
 
 	printf "\n${BAR}${BAR}\nPreview of ${NAME}$\n\n"
 	grep -E -i -m 1 -z -o --color=never "${PREVIEW}" "${PIECE}" \
