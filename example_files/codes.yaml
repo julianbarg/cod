@@ -1,0 +1,21 @@
+precode:
+  highlights:
+    - KXL
+    - Keystone XL
+    - pipeline
+  codes:
+    u: unrelated
+    d: duplicate
+    t: texas
+    s: story
+    e: editorial
+    l: legislative
+    c: court
+    r: regulatory
+    i: inofficial_arena
+    o: official_arena
+    a: adjacent
+    m: minutes
+    ca: canada
+    inst: institution
+    rh: rhetoricale
