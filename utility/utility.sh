@@ -75,6 +75,7 @@ function print_full {
 function choice_preview {
 	PIECE=$1
 	NAME="$(basename ${PIECE})"
+	PADDING="$(printf ' %.0s' {1..450})"
 	local choice
 	
 	if [ "${VERBOSE}" = true ]; then
@@ -85,12 +86,19 @@ function choice_preview {
 
 	# PREVIEW="\S*.{500}(${HIGHLIGHT}).{500}\S*"
 	# Much better performance!
-	PREVIEW=".{500}(${HIGHLIGHT}).{500}"
+	PREVIEW=".{450}(${HIGHLIGHT}).{450}"
+
+	# Add padding
+	sed -i "1s/^/${PADDING}\n/" "${PIECE}"
+	echo "${PADDING}" >> "${PIECE}"
 
 	printf "\n${BAR}${BAR}\nPreview of ${NAME}$\n\n"
 	grep -E -i -m 1 -z -o --color=never "${PREVIEW}" "${PIECE}" \
-		| grep -E -m 1 -i -z --color=always "${HIGHLIGHT}"
-	# grep -E -i -s -C 5 -m 2 --color=auto "${HIGHLIGHT}" ${PIECE}
+		| grep -E -m 1 -i -z --color=always "${HIGHLIGHT}" \
+		| sed -e 's/^[ \t]*//' -e 's/[ \t]*$//'
+
+	# Remove padding
+	sed -i '1d;$d' "${PIECE}"
 	printf "\n\nEnd of ${NAME} preview\n${BAR}${BAR}\n"
 
 	read -p "Show full? (y/n) `echo $'\n> '`" choice
