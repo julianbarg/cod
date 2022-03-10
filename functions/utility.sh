@@ -104,9 +104,11 @@ function choice_preview {
 	sed -i '1d;$d' "${PIECE}"
 	printf "\n\nEnd of ${NAME} preview\n${BAR}${BAR}\n"
 
-	read -p "Show full? (y/n) `echo $'\n> '`" choice
+	read -p "Show full? (y/n) Or open in sublime. (s) `echo $'\n> '`" choice
 	if [[ "$choice" == "y" ]]; then
 		sleep .2
 		print_full $PIECE
+	elif [[ "${choice}" == "s" ]]; then
+		subl $PIECE --project ~/.config/cod/cod.sublime-project
 	fi
 }
