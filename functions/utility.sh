@@ -109,6 +109,7 @@ function choice_preview {
 		sleep .2
 		print_full $PIECE
 	elif [[ "${choice}" == "s" ]]; then
+		#TODO: Need to create this sublime project file if it does not exist.
 		subl $PIECE --project ~/.config/cod/cod.sublime-project
 	fi
 }
