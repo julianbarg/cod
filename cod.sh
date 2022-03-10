@@ -122,7 +122,7 @@ function cod {
 	fi
 	if [[ ! -z $PROJECT && -z $HIGHLIGHT ]]; then
 		PROJECT_YAML="$(cat $YAML | yq ".${PROJECT}")"
-		if [[ "${PROJECT_YAML}" == "*highlights*" ]]; then
+		if [[ "${PROJECT_YAML}"=="*highlights*" ]]; then
 			HIGHLIGHT=$( cat $YAML | yq ".${PROJECT}.highlights" | \
 				yq 'join("|")')
 			true

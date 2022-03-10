@@ -39,7 +39,8 @@ function take_row {
 # output file.
 
 function take_data {
-	# TODO: write file to csv.
+	# TODO: Need to implement a function to validate csv--if there are cols
+	# added to the yaml we want to collect additional data only.
 	ITERATION=$1
 	shift
 	# filter_folder to allow for continuing an iteration.
