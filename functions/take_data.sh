@@ -22,8 +22,12 @@ function take_row {
 
 	print_piece $FILE
   	for col in $COLS; do
-  		echo "Input for ${col}:"
-  		read -p "> " input
+  		echo "Input for ${col} (or 'x' to skip):"
+  		read -e -p "> " input
+  		if [[ $input == "x" ]]; then
+  			insert_iteration_ "${ITERATION}" "${FILE}"
+  			return 0
+  		fi
   		row+='"'
   		row+="${input}"
   		row+='",'
