@@ -11,6 +11,7 @@ function cod {
 	source "${PROJECT_HOME}/functions/print_piece.sh"
 	source "${PROJECT_HOME}/functions/recode.sh"
 	source "${PROJECT_HOME}/functions/remove_code.sh"
+	source "${PROJECT_HOME}/functions/take_data.sh"
 
 	## Parsing arguments and calling function.
 
@@ -22,6 +23,7 @@ function cod {
 	local VERBOSE
 	local SHORT_CODE
 	local FULL
+	local OUTPUT
 	# We store $PRIOR_ITERATION to allow for use of --resume flag.
 	PRIOR_PROJECT=$PROJECT
 	PROJECT=""
@@ -56,6 +58,11 @@ function cod {
 			  ;;
 			-n|--new)
 			  ITERATION=$(date +"%m/%d/%Y_%H:%M")
+			  shift
+			  ;;
+			-o|-O|--output)
+			  OUTPUT="$2"
+			  shift
 			  shift
 			  ;;
 			-p|-P|--project)
@@ -113,9 +120,13 @@ function cod {
 		#TODO: Add some error if project/code does not exist.
 		CODE=$( cat $YAML | yq ".${PROJECT}.codes.${SHORT_CODE}" )
 	fi
-	if [[ ! -z $PROJECT && HIGHLIGHT="" ]]; then
-		HIGHLIGHT=$( cat $YAML | yq ".${PROJECT}.highlights" | \
-			yq 'join("|")')
+	if [[ ! -z $PROJECT && -z $HIGHLIGHT ]]; then
+		PROJECT_YAML="$(cat $YAML | yq ".${PROJECT}")"
+		if [[ "${PROJECT_YAML}" == "*highlights*" ]]; then
+			HIGHLIGHT=$( cat $YAML | yq ".${PROJECT}.highlights" | \
+				yq 'join("|")')
+			true
+		fi
 	fi 
 
 	# For debugging:
@@ -129,6 +140,7 @@ function cod {
 		#TODO: this may yield negative result.
 		more=$(($# - 3))
 		echo "Full: $FULL"
+		echo "Output: $OUTPUT"
 		echo "Positional arguments: $1, $2, $3 and $more more."
 	fi
 
@@ -145,11 +157,11 @@ function cod {
 		  ;;
 		recode)
 		  shift
-		  recode "$ITERATION" "$CODE" "$@"
+		  recode "${ITERATION}" "${CODE}" "$@"
 		  ;;
 		precode)
 		  shift
-		  precode "$ITERATION" "$@"
+		  precode "${ITERATION}" "$@"
 		  ;;
 		print_piece)
 		  shift
@@ -158,6 +170,10 @@ function cod {
 		remove_code)
 		  shift
 		  remove_code "${CODE}" "$@"
+		  ;;
+		take_data)
+		  shift
+		  take_data "${ITERATION}" "$@"
 		  ;;
 		*)
 		  echo "Not a valid command."
