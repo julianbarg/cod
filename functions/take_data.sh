@@ -81,8 +81,12 @@ function take_data {
   		echo "${COLS}" >> "${OUTPUT}"
   	fi
 
+  	#TODO: I am sure there is a built-in way to get index of positional arguments.
+  	local index=1
   	for i; do
+  		printf "\n## Viewing document ${index} of $#"
 		take_row "${ITERATION}" $i
+		index+=1
   	done
 
 }
