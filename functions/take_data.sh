@@ -86,7 +86,7 @@ function take_data {
   	for i; do
   		printf "\n## Viewing document ${index} of $#"
 		take_row "${ITERATION}" $i
-		index+=1
+		let index+=1
   	done
 
 }
