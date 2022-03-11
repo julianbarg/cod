@@ -24,6 +24,7 @@ function take_row {
   	for col in $COLS; do
   		echo "Input for ${col} (or 'x' to skip):"
   		read -e -p "> " input
+  		input=${input//\"\'}
   		if [[ $input == "x" ]]; then
   			insert_iteration_ "${ITERATION}" "${FILE}"
   			return 0
